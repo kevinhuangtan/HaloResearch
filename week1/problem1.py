@@ -1,6 +1,8 @@
 import numpy as np
 from itertools import islice
 import pprint as pp
+# from astropy.io import ascii
+from astropy.table import Table
 
 def create_ascii():
     # print 1-e
@@ -15,11 +17,11 @@ def create_ascii():
             l += '\n'
             f.write(l)
 
-create_ascii()
+# create_ascii()
 
-def ascii_reader(chunksize, *args):
+def ascii_reader(chunksize, *args, **kwargs):
     if(not args):
-        args = [0,1,2]
+        args = [0,1,2] #columns
     with open('rockstar', 'r') as f:
 
         for i in xrange(0, 10):
@@ -32,13 +34,18 @@ def ascii_reader(chunksize, *args):
                 line = f.readline().split()
                 if(line):
                     chunk.append([line[i] for i in args])
+                    chunk_np = np.array(chunk)
+                    table = Table(chunk_np, names=('a','b','c'))
                 else: #last chunk will cover reminader
                     break 
             if not chunk:
                 break
-            # print chunk
-            pp.pprint(chunk)
-            yield chunk
+            print table
+            # pp.pprint(chunk)
+            if('cut' in kwargs):
+                yield kwargs['cut'](chunk)
+            else:
+                yield chunk
 
 # ascii_reader()
 a = ascii_reader(10)
