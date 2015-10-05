@@ -112,7 +112,7 @@ def column_cut_tree_gen(columns_to_keep, f, dtype = dt):
     tree_length = int(first_row['haloid_last_prog_depthfirst']) - int(first_row['haloid_depth_first']) + 1
     row = 0
     while row < tree_length - 1:
-        line = f.readline()  
+        line = f.readline() 
         parsed_line = line.strip().split()
         yield tuple(parsed_line[i] for i in columns_to_keep)
         row += 1 
@@ -135,7 +135,7 @@ def write_trunk_ascii(fname, ouput_fname, dt, **kwargs):
         If provided, must have the same length as the input ``dt``. 
 
     """
-    h = ascii_reader.header_len(fname)
+    h = header_len(fname)
     columns_to_keep = [i for i in range(0, len(dt))]
 
     with open(fname, 'r') as f:
@@ -144,14 +144,17 @@ def write_trunk_ascii(fname, ouput_fname, dt, **kwargs):
                 f.readline()
             num_trees = int(f.readline())
             tree_index = 0
-            while(tree_index < 1):
+            while(tree_index < num_trees):
+                print tree_index
                 line = f.readline()  
                 tree_id = line[6:].strip('\n')
                 arr = np.array(list(column_cut_tree_gen(columns_to_keep, f, dt)), dtype=dt)
                 depth_sort =  arr['haloid_depth_first'].argsort()
-                trunk = get_trunk(arr[depth_sort])
+                trunk = get_trunk_mask(arr[depth_sort])
                 o.write("#" + tree_id + "\n")
                 np.savetxt(ouput_fname, trunk)
                 tree_index += 1
     return 
+
+write_trunk_ascii('tree_0_0_0.dat', 'output.dat', dt)
 
