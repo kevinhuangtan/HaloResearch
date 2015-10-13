@@ -136,7 +136,7 @@ def create_paramater_binary(fname, ouput_fname, tree_directory_hdf5, param):
                 print 'tree index', tree_index
                 line = f.readline()  
                 tree_id = line[6:].strip('\n')
-            	binaryarr += (list(param_gen(f, param)))
+                binaryarr += (list(param_gen(f, param)))
                 tree_index += 1
             mm = np.memmap(filename='trees/0_0_0/mass.float64/mass.data', dtype='float64', mode='w+', shape=(1, len(binaryarr)))
             mm[:] = np.array(binaryarr)
@@ -144,17 +144,17 @@ def create_paramater_binary(fname, ouput_fname, tree_directory_hdf5, param):
             del mm
     return 
 
-# 
+#
 # create_paramater_binary('tree_0_0_0.dat','mass', 'output.hdf5', MVIR)
 
 def get_parameter(tree_directory_hdf5, tree_id):
-	with h5py.File(tree_directory_hdf5,"r") as hf: 
-		offset_size = 8
-		offset = offset_size * hf[str(tree_id)][1]
-		length = hf[str(tree_id)][0]
-		check = np.memmap(filename='trees/0_0_0/mass.float64/mass.data', dtype="float64", mode='r', shape=(1, length), offset=offset)
-		print check
-		del check
-	return 
+    with h5py.File(tree_directory_hdf5,"r") as hf: 
+        offset_size = 8
+        offset = offset_size * hf[str(tree_id)][1]
+        length = hf[str(tree_id)][0]
+        check = np.memmap(filename='trees/0_0_0/mass.float64/mass.data', dtype="float64", mode='r', shape=(1, length), offset=offset)
+        print check
+        del check
+    return 
 
 get_parameter('output.hdf5', 3060312953)
