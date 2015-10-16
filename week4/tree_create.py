@@ -152,6 +152,7 @@ def get_parameter(tree_directory_hdf5, tree_id):
         offset_size = 8
         offset = offset_size * hf[str(tree_id)][1]
         length = hf[str(tree_id)][0]
+        print length
         check = np.memmap(filename='trees/0_0_0/mass.float64/mass.data', dtype="float64", mode='r', shape=(1, length), offset=offset)
         print check
         del check
